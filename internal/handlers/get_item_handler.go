@@ -7,19 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary Get exchange
-// @Tags Get cryptocurrency Exchange
-// @Description Get cryptocurrency exchange rate
-// @ID get-exchange
-// @Accept  json
-// @Produce  json
-// @Param input body models.BlockchainItemPostgres true "Get cryptocurrency exchange rate"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} ErrorResponse
-// @Failure 500 {object} ErrorResponse
-// @Failure default {object} ErrorResponse
-// @Router /api/blockchain [post]
-
 func (h *Handler) GetItemBlockchainHandler(ctx *gin.Context) {
 
 	var input models.BlockchainItemPostgres
