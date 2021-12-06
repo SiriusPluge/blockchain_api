@@ -1,10 +1,16 @@
-
 FROM golang:latest
+
+RUN mkdir /app
+COPY ./ /app
 
 WORKDIR /app
 
-COPY . .
+#install psql
+RUN apt-get update
+RUN apt-get -y install postgresql-client
 
-RUN go build -o main ./cmd/
+RUN chmod +x wait-for-postgres.sh
 
-CMD ["./main"]
+RUN go build -o blockchain-app ./cmd/main.go
+
+CMD ["/app/blockchain-app"]

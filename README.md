@@ -1,19 +1,36 @@
-# blockchsin_api
+# blockchain_api
+
+Веб-сервер по предоставлению курса криптавалют, который по обращении к нему в формате:
 
 
-sudo docker run --name=postgres -e POSTGRES_PASSWORD='postgres' -p 7432:5432 -d postgres
-
-migrate -path "./schema" -database "postgres://postgres:postgres@localhost:7432/postgres?sslmode=disable" up
- 
-sudo cat ./postgres/db/seeds/seeds.sql | psql postgres://postgres:postgres@localhost:7323
-
-migrate create -ext sql -dir ./schema/migrations -seq init
-
-sudo docker run -v schema:/migrations --network host migrate/migrate
-    -path=schema/migrations/000001_init.up.sql -database postgres://postgres:postgres@localhost:7323/postgres?sslmode=disable up
+    ```json
+    [
+        {
+            "symbol":"XLM-EUR"
+        }
+    ]
+    ```
+ отдает данные в указанном формате: 
 
 
+    ```json
+    {
+        "XLM-EUR": {
+            "price": 0.25685,
+            "volume": 49644.7076291,
+            "last_trade":0.24
+        }
+    }
+    ```
 
-# connect to DB:
-- sudo docker exec -it e8e7b24f4f08 /bin/bash
-- psql -U postgres
+Данные берутся из внешнего источника и сохраняются в БД раз в 30 секунд, а ответ на запрос должен формироваться на основе данных в БД.
+- Источник: <https://api.blockchain.com/v3/exchange/tickers>
+
+ - В качестве СУБД используется PostgresQL
+
+# Пример использования:
+- git clone https://github.com/SiriusPluge/blockchain_api.git
+- sudo docker-compose up
+
+# P.S.: 
+- прилагаю коллекцию для Postman
