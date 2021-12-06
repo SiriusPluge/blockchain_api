@@ -4,20 +4,17 @@ import (
 	"blockchain_api/internal/handlers"
 	"blockchain_api/internal/repository"
 	"blockchain_api/internal/service"
+	"blockchain_api/pkg/models"
 	"blockchain_api/pkg/server"
+	"encoding/json"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
-
-// @title Blockchain HTTP API
-// @version 1.0
-// @description API Server for Blockchain Application
-
-// @host localhost:8000
-// @BasePath /
 
 func main() {
 
@@ -47,7 +44,7 @@ func main() {
 		SSLMode:  viper.GetString("db.sslmode"),
 	})
 
-	go service.GetAndSaveBlockchainList(db)
+	go GetAndSaveBlockchainList(db)
 
 	repos := repository.NewRepositiry(db)
 	service := service.NewService(repos)
@@ -63,4 +60,28 @@ func initConfig() error {
 	viper.AddConfigPath("internal/configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
+}
+
+func GetAndSaveBlockchainList(db *repository.PostgresDB) {
+	for {
+
+		resp, errResp := http.Get("https://api.blockchain.com/v3/exchange/tickers")
+		if errResp != nil {
+			logrus.Fatalf("error when requesting a receipt blockchain list: %s \n", errResp.Error())
+		}
+		// defer resp.Body.Close()
+
+		var blockchainList []models.BlockchainItem
+		if errDecode := json.NewDecoder(resp.Body).Decode(&blockchainList); errDecode != nil {
+			logrus.Fatalf("decoding errors to the resp.body: %s \n", errDecode.Error())
+		}
+
+		errUpdate := db.UpdateItem(blockchainList)
+		if errUpdate != nil {
+			logrus.Fatalf("update error blockchainitem: %s\n", errUpdate.Error())
+		}
+
+		// wait 30 sec
+		time.Sleep(30 * time.Second)
+	}
 }
