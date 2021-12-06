@@ -11,6 +11,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var schema = `
+CREATE TABLE blockchain_list (
+    id  SERIAL NOT NULL UNIQUE,
+    symbol  VARCHAR(10) UNIQUE PRIMARY KEY,
+    price_24h  NUMERIC,
+    volume_24h NUMERIC,
+    last_trade_price NUMERIC
+)`
+
 // Backend инкапсулирует подключение к MongoDB
 type PostgresDB struct {
 	DB *sqlx.DB
@@ -42,7 +51,7 @@ func NewConnectionPostgresDB(cfg *ConfigPostgres) *PostgresDB {
 		logrus.Fatalf("error connection postgresDB: %s", errConnDB.Error())
 	}
 
-	fmt.Printf("successful connection to the database in: %s", cfg.Port)
+	db.MustExec(schema)
 
 	// insert to the DB blockchainList
 	initInsertBCList(db)
