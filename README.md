@@ -33,4 +33,12 @@
 - sudo docker-compose up
 
 # P.S.: 
-- прилагаю коллекцию для Postman
+- прилагаю коллекцию для Postman (либо)
+- 
+    ```
+    curl --location --request POST 'localhost:8080/api/blockchain' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "symbol":"BCH-USD"
+    }'
+    ```

@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "e8ee0a5c-eadb-4f0c-86da-33de90ff92f4",
+		"name": "blockchain",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/api/blockchain",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"symbol\":\"BCH-USD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/blockchain",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"blockchain"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
