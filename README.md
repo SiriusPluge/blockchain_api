@@ -30,7 +30,7 @@
 
 # Пример использования:
 - git clone https://github.com/SiriusPluge/blockchain_api.git
-- sudo docker-compose up
+- sudo docker-compose up -d
 
 # P.S.: 
 - прилагаю коллекцию для Postman (либо)
